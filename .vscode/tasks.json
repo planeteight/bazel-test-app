@@ -12,6 +12,24 @@
       "type": "shell",
       "command": "bash scripts/doctor.sh",
       "problemMatcher": []
+    },
+    {
+      "label": "Doctor: verify Android tooling",
+      "type": "shell",
+      "command": "bash scripts/doctor-android.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Doctor: verify iOS build support",
+      "type": "shell",
+      "command": "bash scripts/doctor-ios.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "Bazel: build all projects",
+      "type": "shell",
+      "command": "npx -y @bazel/bazelisk build //:all_projects",
+      "problemMatcher": []
     }
   ]
 }

@@ -1,0 +1,28 @@
+package(default_visibility = ["//visibility:public"])
+
+genrule(
+    name = "android_project_bundle",
+    srcs = glob([
+        "app/src/main/**",
+        "app/build.gradle",
+        "build.gradle",
+        "settings.gradle",
+        "gradle.properties",
+    ]),
+    outs = ["android_project_bundle.txt"],
+    cmd = """
+set -e
+echo "Android project sources bundled for Bazel orchestration." > "$@"
+if command -v sdkmanager >/dev/null 2>&1; then
+  echo "sdkmanager: available" >> "$@"
+else
+  echo "sdkmanager: missing on host" >> "$@"
+fi
+if command -v adb >/dev/null 2>&1; then
+  echo "adb: present" >> "$@"
+else
+  echo "adb: missing on host" >> "$@"
+fi
+echo "Use Android Studio for emulator/device runs in this repository setup." >> "$@"
+""",
+)

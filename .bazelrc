@@ -1,0 +1,4 @@
+# Place convenience symlinks under bazel/ instead of repository root.
+build --symlink_prefix=bazel/
+test --symlink_prefix=bazel/
+run --symlink_prefix=bazel/

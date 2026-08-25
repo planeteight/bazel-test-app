@@ -1,0 +1,11 @@
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "all_projects",
+    srcs = [
+        "//cpp-pulseboard:pulseboard_cpp",
+        "//java-pulseboard:pulseboard_java",
+        "//android-pulseboard:android_project_bundle",
+        "//ios-pulseboard:ios_project_bundle",
+    ],
+)

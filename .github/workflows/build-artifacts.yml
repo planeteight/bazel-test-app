@@ -1,0 +1,48 @@
+name: Build Artifacts
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Bazelisk
+        run: npm install --global @bazel/bazelisk
+
+      - name: Build all Bazel targets
+        run: bazelisk build //:all_projects
+
+      - name: Collect artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          cp bazel/bin/cpp-pulseboard/pulseboard_cpp artifacts/
+          cp bazel/bin/java-pulseboard/pulseboard_java.jar artifacts/
+          cp bazel/bin/android-pulseboard/android_project_bundle.txt artifacts/
+          cp bazel/bin/ios-pulseboard/ios_project_bundle.txt artifacts/
+          sha256sum artifacts/* > artifacts/SHA256SUMS.txt
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulseboard-build-artifacts
+          path: artifacts/
+          if-no-files-found: error

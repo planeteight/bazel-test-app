@@ -33,4 +33,14 @@ if [[ -f .pre-commit-config.yaml ]]; then
   pre-commit install
 fi
 
+if [[ -f .devcontainer/install-android-sdk.sh ]]; then
+  echo "[post-create] installing Android SDK command line tools"
+  bash .devcontainer/install-android-sdk.sh
+fi
+
+if [[ -f scripts/doctor-ios.sh ]]; then
+  echo "[post-create] checking iOS build support"
+  bash scripts/doctor-ios.sh
+fi
+
 echo "[post-create] setup complete"

@@ -1,0 +1,15 @@
+package(default_visibility = ["//visibility:public"])
+
+genrule(
+    name = "ios_project_bundle",
+    srcs = glob([
+        "PulseBoard/**",
+        "PulseBoard.xcodeproj/**",
+    ]),
+    outs = ["ios_project_bundle.txt"],
+    cmd = """
+set -e
+echo "iOS project sources bundled for Bazel orchestration." > "$@"
+echo "SwiftUI app build/run requires Xcode on macOS host." >> "$@"
+""",
+)

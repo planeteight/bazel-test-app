@@ -1,0 +1,179 @@
+name: Release Prebuilt Artifacts
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Tag name to publish, for example v1.0.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  backend-build:
+    name: Build C++ and Java
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Bazelisk
+        run: npm install --global @bazel/bazelisk
+
+      - name: Build backend artifacts
+        run: bazelisk build //cpp-pulseboard:pulseboard_cpp //java-pulseboard:pulseboard_java
+
+      - name: Collect backend artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p release/backend
+          cp bazel/bin/cpp-pulseboard/pulseboard_cpp release/backend/pulseboard-cpp-linux-x86_64
+          cp bazel/bin/java-pulseboard/pulseboard_java.jar release/backend/pulseboard-java.jar
+
+      - name: Upload backend artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-release-assets
+          path: release/backend/
+          if-no-files-found: error
+
+  android-build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: |
+          set -euo pipefail
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0"
+
+      - name: Build release APK
+        working-directory: android-pulseboard
+        run: gradle --no-daemon assembleRelease
+
+      - name: Collect Android artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p release/android
+          apk_path="$(find android-pulseboard/app/build/outputs/apk/release -name '*.apk' | head -n 1)"
+          cp "${apk_path}" release/android/pulseboard-android-release-unsigned.apk
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-assets
+          path: release/android/
+          if-no-files-found: error
+
+  ios-build:
+    name: Build iOS App Bundle
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build iOS simulator app
+        working-directory: ios-pulseboard
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project PulseBoard.xcodeproj \
+            -scheme PulseBoard \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Collect iOS artifacts
+        working-directory: ios-pulseboard
+        run: |
+          set -euo pipefail
+          mkdir -p ../release/ios
+          app_path="build/Build/Products/Release-iphonesimulator/PulseBoard.app"
+          ditto -c -k --sequesterRsrc --keepParent "${app_path}" ../release/ios/pulseboard-ios-simulator-app.zip
+
+      - name: Upload iOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-release-assets
+          path: release/ios/
+          if-no-files-found: error
+
+  publish-release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    needs:
+      - backend-build
+      - android-build
+      - ios-build
+
+    steps:
+      - name: Download backend artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-release-assets
+          path: release-assets/
+
+      - name: Download Android artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: android-release-assets
+          path: release-assets/
+
+      - name: Download iOS artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-release-assets
+          path: release-assets/
+
+      - name: Generate release checksums
+        run: |
+          set -euo pipefail
+          cd release-assets
+          sha256sum * > SHA256SUMS.txt
+
+      - name: Publish release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag || github.ref_name }}
+          files: |
+            release-assets/pulseboard-cpp-linux-x86_64
+            release-assets/pulseboard-java.jar
+            release-assets/pulseboard-android-release-unsigned.apk
+            release-assets/pulseboard-ios-simulator-app.zip
+            release-assets/SHA256SUMS.txt
+          generate_release_notes: true
+          draft: false
+          prerelease: false

@@ -3,7 +3,7 @@ set -euo pipefail
 
 echo "[doctor] checking tool availability"
 
-required_tools=(git rg jq node npm python)
+required_tools=(git rg jq node npm python cmake javac java)
 missing=0
 
 for tool in "${required_tools[@]}"; do
@@ -35,6 +35,9 @@ jq --version
 node --version
 npm --version
 python --version
+cmake --version | head -n 1
+javac --version
+java --version | head -n 1
 
 echo "[doctor] checking assistant files"
 for file in CLAUDE.md AGENTS.md .clinerules .devcontainer/devcontainer.json; do
