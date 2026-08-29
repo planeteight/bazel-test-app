@@ -6,17 +6,19 @@
     "ios-pulseboard"
   ],
   "services": {
-    "scoreService": {
-      "owner": "cpp-pulseboard",
-      "dailyScore": 69.8,
-      "status": "Good start, keep the streak alive."
+    "momentumService": {
+      "owner": "cpp-momentum-service",
+      "weekAverage": 70.6,
+      "momentum": 16.0,
+      "volatility": 4.98,
+      "riskLevel": "low"
     },
-    "insightsService": {
-      "owner": "java-pulseboard",
-      "focusHabit": "Reading",
-      "remaining": 10,
-      "remainingUnit": "minutes",
-      "recommendation": "Add one 10-minute reading block to close today's biggest gap."
+    "plannerService": {
+      "owner": "java-focus-planner",
+      "timeBudgetMinutes": 90,
+      "projectedImpact": 170,
+      "firstTask": "Triage support queue",
+      "recommendation": "Start with the shortest urgent task, then execute the highest-impact backlog item."
     }
   },
   "habits": [

@@ -45,10 +45,10 @@ struct ContentView: View {
                     Text("Connected Services")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundStyle(Color(red: 0.06, green: 0.11, blue: 0.30))
-                    Text("Score: cpp-pulseboard")
+                    Text("Score: cpp-momentum-service")
                         .font(.system(size: 14, weight: .regular, design: .rounded))
                         .foregroundStyle(Color(red: 0.13, green: 0.20, blue: 0.37))
-                    Text("Insights: java-pulseboard")
+                    Text("Insights: java-focus-planner")
                         .font(.system(size: 14, weight: .regular, design: .rounded))
                         .foregroundStyle(Color(red: 0.13, green: 0.20, blue: 0.37))
                 }

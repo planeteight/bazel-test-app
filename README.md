@@ -48,13 +48,13 @@ Template for development with Claude AI coding assistants.
 
 This repository now includes a single demo product implemented across four clients:
 
-- `cpp-pulseboard`: C++ score service.
-- `java-pulseboard`: Java insights service.
+- `cpp-momentum-service`: C++ momentum and risk analytics service.
+- `java-focus-planner`: Java focus-session planning service.
 - `android-pulseboard`: Android frontend app.
 - `ios-pulseboard`: iOS SwiftUI frontend app.
 - `shared/pulseboard-data.json`: shared demo data contract for the product domain.
 
-The mobile frontends present outputs from backend services: scoring from C++ and recommendations from Java.
+The mobile frontends present outputs from backend services: weekly momentum/risk analysis from C++ and time-boxed planning recommendations from Java.
 
 ## Bazel Integration
 
@@ -68,8 +68,8 @@ npx -y @bazel/bazelisk build //:all_projects
 
 Per-project Bazel targets:
 
-- `//cpp-pulseboard:pulseboard_cpp` (native `cc_binary`)
-- `//java-pulseboard:pulseboard_java` (native `java_binary`)
+- `//cpp-momentum-service:pulseboard_cpp` (native `cc_binary`)
+- `//java-focus-planner:pulseboard_java` (native `java_binary`)
 - `//android-pulseboard:android_project_bundle` (Android project source bundle + tool availability note)
 - `//ios-pulseboard:ios_project_bundle` (iOS project source bundle + host build requirement note)
 
@@ -113,7 +113,7 @@ The iOS release asset is an unsigned simulator app bundle zip built on `macos-la
 ### C++ Demo
 
 ```bash
-cd cpp-pulseboard
+cd cpp-momentum-service
 cmake -S . -B build
 cmake --build build
 ./build/pulseboard
@@ -122,7 +122,7 @@ cmake --build build
 ### Java Demo
 
 ```bash
-cd java-pulseboard
+cd java-focus-planner
 bash run.sh
 ```
 

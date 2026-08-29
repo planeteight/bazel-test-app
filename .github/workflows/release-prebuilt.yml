@@ -29,14 +29,14 @@ jobs:
           java-version: "21"
 
       - name: Build backend artifacts
-        run: npx -y @bazel/bazelisk build //cpp-pulseboard:pulseboard_cpp //java-pulseboard:pulseboard_java
+        run: npx -y @bazel/bazelisk build //cpp-momentum-service:pulseboard_cpp //java-focus-planner:pulseboard_java
 
       - name: Collect backend artifacts
         run: |
           set -euo pipefail
           mkdir -p release/backend
-          cp bazel/bin/cpp-pulseboard/pulseboard_cpp release/backend/pulseboard-cpp-linux-x86_64
-          cp bazel/bin/java-pulseboard/pulseboard_java.jar release/backend/pulseboard-java.jar
+          cp bazel/bin/cpp-momentum-service/pulseboard_cpp release/backend/pulseboard-cpp-linux-x86_64
+          cp bazel/bin/java-focus-planner/pulseboard_java.jar release/backend/pulseboard-java.jar
 
       - name: Upload backend artifacts
         uses: actions/upload-artifact@v4

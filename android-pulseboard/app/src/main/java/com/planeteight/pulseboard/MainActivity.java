@@ -7,8 +7,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String SCORE_SERVICE = "cpp-pulseboard";
-    private static final String INSIGHTS_SERVICE = "java-pulseboard";
+    private static final String SCORE_SERVICE = "cpp-momentum-service";
+    private static final String INSIGHTS_SERVICE = "java-focus-planner";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -31,8 +31,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p artifacts
-          cp bazel/bin/cpp-pulseboard/pulseboard_cpp artifacts/
-          cp bazel/bin/java-pulseboard/pulseboard_java.jar artifacts/
+          cp bazel/bin/cpp-momentum-service/pulseboard_cpp artifacts/
+          cp bazel/bin/java-focus-planner/pulseboard_java.jar artifacts/
           cp bazel/bin/android-pulseboard/android_project_bundle.txt artifacts/
           cp bazel/bin/ios-pulseboard/ios_project_bundle.txt artifacts/
           sha256sum artifacts/* > artifacts/SHA256SUMS.txt

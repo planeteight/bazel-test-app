@@ -1,9 +1,9 @@
 # PulseBoard Android App
 
-This app is the PulseBoard frontend for mobile. It presents score and insight outputs from backend services:
+This app is the PulseBoard frontend for mobile. It presents analytics and planning outputs from backend services:
 
-- `cpp-pulseboard` for scoring.
-- `java-pulseboard` for insights and recommendations.
+- `cpp-momentum-service` for weekly momentum and risk analytics.
+- `java-focus-planner` for focus-session planning recommendations.
 
 ## Run in Android Studio
 
