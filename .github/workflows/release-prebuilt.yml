@@ -118,7 +118,7 @@ jobs:
 
       - name: Collect iOS artifacts
         working-directory: ios-pulseboard
-        run: |
+        run: |yt
           set -euo pipefail
           mkdir -p ../release/ios
           app_path="build/Build/Products/Release-iphonesimulator/PulseBoard.app"
