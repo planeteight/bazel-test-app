@@ -28,11 +28,8 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      - name: Set up Bazelisk
-        run: npm install --global @bazel/bazelisk
-
       - name: Build backend artifacts
-        run: bazelisk build //cpp-pulseboard:pulseboard_cpp //java-pulseboard:pulseboard_java
+        run: npx -y @bazel/bazelisk build //cpp-pulseboard:pulseboard_cpp //java-pulseboard:pulseboard_java
 
       - name: Collect backend artifacts
         run: |
@@ -118,7 +115,7 @@ jobs:
 
       - name: Collect iOS artifacts
         working-directory: ios-pulseboard
-        run: |yt
+        run: |
           set -euo pipefail
           mkdir -p ../release/ios
           app_path="build/Build/Products/Release-iphonesimulator/PulseBoard.app"

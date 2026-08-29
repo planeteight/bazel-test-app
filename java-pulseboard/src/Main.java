@@ -23,6 +23,8 @@ public class Main {
 
         Habit weakest = null;
         int worstGap = Integer.MIN_VALUE;
+        int totalCompleted = 0;
+        int totalTarget = 0;
 
         for (Habit habit : habits) {
             int gap = habit.target - habit.completed;
@@ -30,11 +32,14 @@ public class Main {
                 worstGap = gap;
                 weakest = habit;
             }
+            totalCompleted += habit.completed;
+            totalTarget += habit.target;
         }
 
         System.out.println("PulseBoard Insights Service (Java)");
         System.out.println("---------------------------------");
         System.out.println("service=java-pulseboard");
+        System.out.println("insight.progress=" + totalCompleted + "/" + totalTarget);
 
         if (weakest == null || worstGap <= 0) {
             System.out.println("insight.focus=none");

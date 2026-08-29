@@ -24,11 +24,8 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      - name: Set up Bazelisk
-        run: npm install --global @bazel/bazelisk
-
       - name: Build all Bazel targets
-        run: bazelisk build //:all_projects
+        run: npx -y @bazel/bazelisk build //:all_projects
 
       - name: Collect artifacts
         run: |
