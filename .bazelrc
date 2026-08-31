@@ -2,3 +2,28 @@
 build --symlink_prefix=bazel/
 test --symlink_prefix=bazel/
 run --symlink_prefix=bazel/
+
+# ── BuildFetch Remote Cache ──────────────────────────────────────────────────
+# Configure BUILDFETCH_BAZEL_REMOTE_CACHE_HOST, BUILDFETCH_BAZEL_PROJECT_ID,
+# and BUILDFETCH_BAZEL_REMOTE_CACHE_TOKEN in the environment before use.
+#
+# CI (read-write):  bazel build //... --config=ci
+# Local (read-only): bazel build //... --config=remote-cache
+
+# Shared remote cache flags used by both configs below.
+build:_remote_cache_base --remote_cache=grpcs://${BUILDFETCH_BAZEL_REMOTE_CACHE_HOST}
+build:_remote_cache_base --remote_instance_name=reapi/bazel/${BUILDFETCH_BAZEL_PROJECT_ID}
+build:_remote_cache_base --remote_timeout=30
+build:_remote_cache_base --remote_cache_header=Authorization=Bearer ${BUILDFETCH_BAZEL_REMOTE_CACHE_TOKEN}
+
+# CI: read-write access — populates the shared cache from reproducible builds.
+build:ci --config=_remote_cache_base
+build:ci --remote_upload_local_results=true
+
+# Local / engineer: read-only access — benefits from CI-warmed cache without polluting it.
+build:remote-cache --config=_remote_cache_base
+build:remote-cache --remote_upload_local_results=false
+
+# Load machine-local overrides (gitignored). Engineers can place their
+# cache:readonly token here without it ever reaching version control.
+try-import %workspace%/.bazelrc.local
