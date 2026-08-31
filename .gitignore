@@ -28,3 +28,6 @@ bazel-out
 bazel-testlogs
 bazel-workspace
 bazel-bazel-test-app
+
+# BuildFetch — local token file (never commit tokens)
+.bazelrc.local
