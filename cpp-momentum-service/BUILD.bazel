@@ -1,8 +1,13 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
 cc_binary(
     name = "pulseboard_cpp",
     srcs = ["src/main.cpp"],
+)
+
+cc_test(
+    name = "pulseboard_cpp_test",
+    srcs = ["tests/test_basic.cpp"],
 )

@@ -24,6 +24,9 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      - name: Run Bazel unit tests for Bazel-supported projects
+        run: npx -y @bazel/bazelisk test //:all_tests --test_output=errors
+
       - name: Build all Bazel targets
         run: npx -y @bazel/bazelisk build //:all_projects
 

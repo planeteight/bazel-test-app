@@ -1,4 +1,4 @@
-load("@rules_java//java:defs.bzl", "java_binary")
+load("@rules_java//java:defs.bzl", "java_binary", "java_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -6,4 +6,11 @@ java_binary(
     name = "pulseboard_java",
     srcs = ["src/Main.java"],
     main_class = "Main",
+)
+
+java_test(
+    name = "pulseboard_java_test",
+    srcs = ["test/ExampleUnitTest.java"],
+    main_class = "ExampleUnitTest",
+    use_testrunner = False,
 )
