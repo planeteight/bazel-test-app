@@ -10,7 +10,7 @@ java_binary(
 
 java_test(
     name = "pulseboard_java_test",
-    srcs = ["test/ExampleUnitTest.java"],
-    main_class = "ExampleUnitTest",
+    srcs = ["test/UnitTest.java"],
+    main_class = "UnitTest",
     use_testrunner = False,
 )
